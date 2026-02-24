@@ -4,19 +4,15 @@ import axios from 'axios'
 
  const BASE_URL = 'https://api.themoviedb.org/3/'
  const ENDPOINT = 'trending/movie/week';
-
-
-
  const KEY_API = import.meta.env.VITE_TMDB_API_KEY;
-
-
-
-
  const container = document.querySelector(".js-movie-list");
  const loadMore = document.querySelector(".js-load-more");
- const page = 1;
+ loadMore.addEventListener("click", onLoadMore);
 
-async function serviceMovie() {
+
+ let page = 1;
+
+async function serviceMovie(page=1) {
     const response = await axios.get(`${BASE_URL}${ENDPOINT}`, {
         params: {
             api_key: KEY_API,
@@ -29,7 +25,11 @@ async function serviceMovie() {
 serviceMovie()
     .then(data => {
         console.log(data);
-        container.insertAdjacentHTML("beforeend", createMarkup(data.results))
+        container.insertAdjacentHTML("beforeend", createMarkup(data.results));
+        if (data.page < data.total_pages){
+          loadMore.classList.replace("load-more-hidden", "js-load-more");  
+        } 
+       
     })
     .catch(error => {
         console.log(error);
@@ -42,9 +42,29 @@ function createMarkup(arr){
         <img src="${BASE_IMG_URL}${poster_path}" alt="${original_title}"/>
         <div class="movie-info">
         <h2>${original_title}</h2>
-        <p>Release Date :${release_date}</p>
-        <p>vote Average :${vote_average}</p>
+        <p>Release Date: ${release_date}</p>
+        <p>vote Average: ${vote_average}</p>
         </div>
     </li>
     `).join("");
+}
+
+async function onLoadMore(event){
+    page++;
+
+    try {
+        console.log("кількість кліків: ", page);
+        const data = await serviceMovie(page);
+        console.log(data);
+        container.insertAdjacentHTML("beforeend", createMarkup(data.results));
+        if (data.page >= data.total_pages) {
+            loadMore.classList.replace( "js-load-more", "load-more-hidden");
+
+
+        }
+
+    } catch(error){
+        alert(error.messag);
+    }
+
 }
