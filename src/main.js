@@ -12,6 +12,7 @@ import axios from 'axios'
 
  let page = 1;
 
+
 async function serviceMovie(page=1) {
     const response = await axios.get(`${BASE_URL}${ENDPOINT}`, {
         params: {
@@ -41,9 +42,10 @@ function createMarkup(arr){
     <li class="movie-card">
         <img src="${BASE_IMG_URL}${poster_path}" alt="${original_title}"/>
         <div class="movie-info">
-        <h2>${original_title}</h2>
-        <p>Release Date: ${release_date}</p>
-        <p>vote Average: ${vote_average}</p>
+       
+        <h2> 🎬 ${original_title}</h2>
+        <h3>📅 Release Date: ${release_date}</h3>
+        <h3>⭐ Rating: ${vote_average}</h3>
         </div>
     </li>
     `).join("");
@@ -51,20 +53,30 @@ function createMarkup(arr){
 
 async function onLoadMore(event){
     page++;
+     loadMore.disabled = true;
 
     try {
         console.log("кількість кліків: ", page);
         const data = await serviceMovie(page);
         console.log(data);
         container.insertAdjacentHTML("beforeend", createMarkup(data.results));
+          const card = document.querySelector(".movie-card");
+            const cardHeight = card. getBoundingClientRect().height;
+            console.log("висота картки:", cardHeight);
+            window.scrollBy({
+                left: 0,
+                top: cardHeight * 5,
+                behavior: "smooth",
+            })
         if (data.page >= data.total_pages) {
             loadMore.classList.replace( "js-load-more", "load-more-hidden");
-
-
+          
         }
 
     } catch(error){
-        alert(error.messag);
+        alert(error.message);
+    } finally {
+        loadMore.disabled = false;
     }
 
 }
