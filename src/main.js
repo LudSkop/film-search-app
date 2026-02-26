@@ -4,7 +4,8 @@ import axios from 'axios'
 
  const BASE_URL = 'https://api.themoviedb.org/3/'
  const ENDPOINT = 'trending/movie/week';
- const KEY_API = import.meta.env.VITE_TMDB_API_KEY;
+ //const KEY_API = import.meta.env.VITE_TMDB_API_KEY;
+const KEY_API = "db3bf6017741aebd99ceac23878d0092";
  const container = document.querySelector(".js-movie-list");
  const loadMore = document.querySelector(".js-load-more");
  loadMore.addEventListener("click", onLoadMore);
