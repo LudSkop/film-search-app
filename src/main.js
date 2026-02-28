@@ -36,17 +36,21 @@ serviceMovie()
     .catch(error => {
         console.log(error);
     })
-
+ //<a href="https://www.themoviedb.org/movie/${id}" target="_blank">
 function createMarkup(arr){
     const BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
-    return arr.map(({original_title, vote_average, poster_path, release_date })=> `
+    return arr.map(({id, original_title, vote_average, poster_path, release_date })=> `
     <li class="movie-card">
-        <img src="${BASE_IMG_URL}${poster_path}" alt="${original_title}"/>
+        <img src="${poster_path ? BASE_IMG_URL + poster_path : 'https://via.placeholder.com/500x750'}" 
+        alt="${original_title}"/>
         <div class="movie-info">
        
         <h2> 🎬 ${original_title}</h2>
         <h3>📅 Release Date: ${release_date}</h3>
         <h3>⭐ Rating: ${vote_average}</h3>
+        <button class="trailer-btn" data-id="${id}">
+                🎥 Watch Trailer
+            </button>
         </div>
     </li>
     `).join("");
@@ -81,3 +85,54 @@ async function onLoadMore(event){
     }
 
 }
+const modal = document.getElementById("trailer-modal");
+const iframe = document.getElementById("trailer-frame");
+const closeBtn = document.querySelector(".close-btn");
+
+function openModal(videoKey) {
+    iframe.src = `https://www.youtube.com/embed/${videoKey}`;
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    iframe.src = "";
+    modal.style.display = "none";
+}
+
+closeBtn.addEventListener("click", closeModal);
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        closeModal();
+    }
+});
+async function getTrailer(movieId) {
+    const response = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movieId}/videos`,
+        {
+            params: {
+                api_key: KEY_API
+            }
+        }
+    );
+
+    return response.data.results;
+}
+container.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("trailer-btn")) {
+        const movieId = e.target.dataset.id;
+        
+        try {
+            const videos = await getTrailer(movieId);
+            const trailer = videos.find(v => v.type === "Trailer" && v.site === "YouTube");
+            
+            if (trailer) {
+                openModal(trailer.key);
+            } else {
+                alert("Trailer not found");
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+});
