@@ -7,7 +7,7 @@
     <title>Vanilla App Template</title>
     <script type="module" crossorigin src="/film-search-app/index.js"></script>
     <link rel="modulepreload" crossorigin href="/film-search-app/assets/vendor-BJ9gahTP.js">
-    <link rel="stylesheet" crossorigin href="/film-search-app/assets/index-BD-TNMox.css">
+    <link rel="stylesheet" crossorigin href="/film-search-app/assets/index-DXKuD33n.css">
   </head>
   <body>
    
@@ -17,6 +17,18 @@
       <div class="button-container">
           <button class="js-load-more load-more-hidden">Load more</button>
       </div>
+      <div class="modal" id="trailer-modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <iframe 
+            id="trailer-frame"
+            width="800" 
+            height="450" 
+            frameborder="0" 
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
       
       <!-- Infinity scroll -->
       <!-- <div class="js-guard"></div>
