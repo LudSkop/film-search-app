@@ -1,0 +1,2 @@
+import"./assets/styles-C6B26fbb.js";import{S as e,N as i,P as s}from"./assets/vendor-CzPQa-jL.js";new e(".swiper",{modules:[i,s],loop:!1,spaceBetween:30,slidesPerView:1,breakpoints:{320:{slidesPerView:1},768:{slidesPerView:1},1440:{slidesPerView:1}},navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},pagination:{el:".swiper-pagination",clickable:!0}});
+//# sourceMappingURL=house.js.map
